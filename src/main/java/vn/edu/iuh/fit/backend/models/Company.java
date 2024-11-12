@@ -1,11 +1,14 @@
 package vn.edu.iuh.fit.backend.models;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+
+import java.util.Objects;
 
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "company")
 public class Company {
@@ -30,6 +33,31 @@ public class Company {
 
     @OneToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "address", nullable = false)
-    private vn.edu.iuh.fit.Address address;
+    private Address address;
 
+    @Override
+    public String toString() {
+        return "Company{" +
+                "id=" + id +
+                ", about='" + about + '\'' +
+                ", email='" + email + '\'' +
+                ", compName='" + compName + '\'' +
+                ", phone='" + phone + '\'' +
+                ", webUrl='" + webUrl + '\'' +
+                ", address=" + address +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Company company = (Company) o;
+        return Objects.equals(id, company.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
+    }
 }

@@ -1,12 +1,15 @@
 package vn.edu.iuh.fit.backend.models;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+
+import java.util.Objects;
 
 @Getter
 @Setter
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "job")
 public class Job {
     @Id
@@ -21,6 +24,28 @@ public class Job {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "company")
-    private vn.edu.iuh.fit.Company company;
+    private Company company;
 
+    @Override
+    public String toString() {
+        return "Job{" +
+                "id=" + id +
+                ", jobDesc='" + jobDesc + '\'' +
+                ", jobName='" + jobName + '\'' +
+                ", company=" + company +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Job job = (Job) o;
+        return Objects.equals(id, job.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
+    }
 }
