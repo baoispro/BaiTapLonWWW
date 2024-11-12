@@ -29,7 +29,7 @@ public class Candidate {
     @Column(name = "phone", nullable = false, length = 15)
     private String phone;
 
-    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @OneToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "address", nullable = false)
     private Address address;
 
