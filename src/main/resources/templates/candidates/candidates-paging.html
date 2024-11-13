@@ -1,5 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
+<style>
+  div.inline {
+    color: black;
+    float: left;
+    padding: 5px 5px;
+    text-decoration: none;
+    display: inline-block;
+  }
+  div.inline a.active {
+    background-color: #FBD603;
+    border:1px solid darkred;
+  }
+</style>
 <head>
     <meta charset="UTF-8">
     <title>Candidates</title>
@@ -14,7 +27,7 @@
     <thead>
     </thead>
     <tbody>
-      <tr th:each="candidate, iStat : ${candidatePage.content}"
+      <tr th:each="candidate, iStat : ${candidates.content}"
           th:style="${iStat.odd}? 'font-weight: bold;'"
           th:alt-title="${iStat.even}? 'even' : 'odd'">
         <td th:text="${candidate.id}"></td>
@@ -28,10 +41,10 @@
       </tr>
     </tbody>
   </table>
-  <div class="inline" th:if="${candidatePage.totalPages > 0}" th:each="pageNumber :${pageNumbers}">
-    <a th:href="@{/candidates(size=${candidatePage.size}, page=${pageNumber})}"
+  <div class="inline" th:if="${candidates.totalPages > 0}" th:each="pageNumber :${pageNumbers}">
+    <a th:href="@{/candidates(size=${candidates.size}, page=${pageNumber})}"
        th:text="${pageNumber}"
-       th:class="${pageNumber==candidatePage.number + 1} ? active"></a>
+       th:class="${pageNumber==candidates.number + 1} ? active"></a>
   </div>
   <br/>
   <!--<div class = "row"><a href="/add-candidate">Add a new Candidate</a></div>-->
