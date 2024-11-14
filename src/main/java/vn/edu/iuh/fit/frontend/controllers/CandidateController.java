@@ -4,9 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import vn.edu.iuh.fit.backend.models.Address;
 import vn.edu.iuh.fit.backend.models.Candidate;
+import vn.edu.iuh.fit.backend.repositories.AddressRepository;
 import vn.edu.iuh.fit.backend.repositories.CandidateRepository;
 import vn.edu.iuh.fit.backend.services.CandidateService;
 
@@ -19,6 +24,9 @@ import java.util.stream.IntStream;
 public class CandidateController {
     @Autowired
     private CandidateRepository candidateRepository;
+
+    @Autowired
+    private AddressRepository addressRepository;
 
     @Autowired
     private CandidateService candidateService;
@@ -45,5 +53,16 @@ public class CandidateController {
             model.addAttribute("pageNumbers", pageNumbers);
         }
         return "candidates/candidates-paging";
+    }
+
+    // Thêm ứng viên
+    @PostMapping("/candidates/add")
+    public String addCandidate (@ModelAttribute("candidate") Candidate candidate,
+                                @ModelAttribute("address")Address address,
+                                BindingResult bindingResult, Model model) {
+        addressRepository.save(address);
+        candidate.setAddress(address);
+        candidateRepository.save(candidate);
+        return "redirect:/candidates";
     }
 }
