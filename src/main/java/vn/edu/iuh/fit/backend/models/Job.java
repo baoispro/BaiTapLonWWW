@@ -3,6 +3,7 @@ package vn.edu.iuh.fit.backend.models;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Getter
@@ -22,6 +23,12 @@ public class Job {
     @Column(name = "job_name", nullable = false)
     private String jobName;
 
+    @Column(name = "job_salary", nullable = false)
+    private String jobSalary;
+
+    @Column(name = "job_createAt", nullable = false)
+    private LocalDateTime jobCreateAt;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "company")
     private Company company;
@@ -32,6 +39,8 @@ public class Job {
                 "id=" + id +
                 ", jobDesc='" + jobDesc + '\'' +
                 ", jobName='" + jobName + '\'' +
+                ", jobSalary='" + jobSalary + '\'' +
+                ", jobCreateAt=" + jobCreateAt +
                 ", company=" + company +
                 '}';
     }

@@ -1,0 +1,13 @@
+#logo{
+  font-weight: bold;
+  background: linear-gradient(to right, #F50057, #9C27B0); /* Gradient từ hồng sang tím */
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+.banner {
+  background: linear-gradient(90deg, #263238, #00b14f 105.53%);
+  border-radius: 5px 5px 0 0;
+  min-height: 100px;
+  padding: 5px 0 0 32px;
+}
