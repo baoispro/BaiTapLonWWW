@@ -31,6 +31,9 @@ public class Company {
     @Column(name = "web_url")
     private String webUrl;
 
+    @Column(name = "image")
+    private String image;
+
     @OneToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "address", nullable = false)
     private Address address;
@@ -44,6 +47,7 @@ public class Company {
                 ", compName='" + compName + '\'' +
                 ", phone='" + phone + '\'' +
                 ", webUrl='" + webUrl + '\'' +
+                ", image='" + image + '\'' +
                 ", address=" + address +
                 '}';
     }

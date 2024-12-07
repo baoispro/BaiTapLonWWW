@@ -29,6 +29,9 @@ public class Candidate {
     @Column(name = "phone", nullable = false, length = 15)
     private String phone;
 
+    @Column(name = "image", nullable = false)
+    private String image;
+
     @OneToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "address", nullable = false)
     private Address address;
@@ -41,6 +44,7 @@ public class Candidate {
                 ", email='" + email + '\'' +
                 ", fullName='" + fullName + '\'' +
                 ", phone='" + phone + '\'' +
+                ", image='" + image + '\'' +
                 ", address=" + address +
                 '}';
     }
