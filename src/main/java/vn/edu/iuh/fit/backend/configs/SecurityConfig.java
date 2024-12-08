@@ -33,11 +33,13 @@ public class SecurityConfig {
                 .csrf().disable()
                 .authorizeHttpRequests(
                 authorizeRequests ->
-                        authorizeRequests.requestMatchers("/","/index.html","/home","/static/**","/css/**").permitAll()
-                                .requestMatchers("/candidates").hasRole("ADMIN")
+                        authorizeRequests.requestMatchers("/","/index.html","/home","/static/**","/css/**","/jobs/**","/companies/**").permitAll()
+                                .requestMatchers("/candidates").hasRole(RoleConstant.ADMIN)
+                                .anyRequest().authenticated()
 
 
-        );
+
+        ).formLogin();
         return http.build();
     }
 
