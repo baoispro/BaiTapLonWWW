@@ -11,3 +11,8 @@
   min-height: 100px;
   padding: 5px 0 0 32px;
 }
+
+.job:hover{
+  background-color: #f4f5f5;
+  cursor: pointer;
+}
