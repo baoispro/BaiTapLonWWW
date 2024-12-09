@@ -41,11 +41,53 @@
       </tr>
     </tbody>
   </table>
-  <div class="inline" th:if="${candidates.totalPages > 0}" th:each="pageNumber :${pageNumbers}">
-    <a th:href="@{/candidates(size=${candidates.size}, page=${pageNumber})}"
-       th:text="${pageNumber}"
-       th:class="${pageNumber==candidates.number + 1} ? active"></a>
-  </div>
+  <nav aria-label="Page navigation">
+      <ul class="pagination justify-content-center">
+          <!-- Nút "Previous" -->
+          <li class="page-item" th:class="${candidates.number == 0} ? 'disabled' : ''">
+              <a class="page-link" th:href="@{/candidates(size=${candidates.size}, page=${candidates.number})}"
+                 th:attr="aria-disabled=${candidates.number == 0}" aria-label="Previous">
+                  <span aria-hidden="true">&laquo;</span>
+              </a>
+          </li>
+
+          <!-- Hiển thị trang đầu tiên -->
+          <li class="page-item" th:if="${candidates.totalPages > 1 && candidates.number > 3}">
+              <a class="page-link" th:href="@{/candidates(size=${candidates.size}, page=1)}">1</a>
+          </li>
+
+          <!-- Dấu "..." trước các trang giữa -->
+          <li class="page-item disabled" th:if="${candidates.number > 3}">
+              <span class="page-link">...</span>
+          </li>
+
+          <!-- Các trang xung quanh trang hiện tại -->
+          <li class="page-item" th:each="pageNumber : ${#numbers.sequence(candidates.number - 1, candidates.number + 1)}"
+              th:if="${pageNumber > 0 && pageNumber <= candidates.totalPages}"
+              th:class="${pageNumber == candidates.number + 1} ? 'active' : ''">
+              <a class="page-link" th:href="@{/candidates(size=${candidates.size}, page=${pageNumber})}" th:text="${pageNumber}"></a>
+          </li>
+
+          <!-- Dấu "..." sau các trang giữa -->
+          <li class="page-item disabled" th:if="${candidates.number < candidates.totalPages - 3}">
+              <span class="page-link">...</span>
+          </li>
+
+          <!-- Hiển thị trang cuối cùng -->
+          <li class="page-item" th:if="${candidates.totalPages > 1 && candidates.number < candidates.totalPages - 3}">
+              <a class="page-link" th:href="@{/candidates(size=${candidates.size}, page=${candidates.totalPages})}" th:text="${candidates.totalPages}"></a>
+          </li>
+
+          <!-- Nút "Next" -->
+          <li class="page-item" th:class="${candidates.number == candidates.totalPages - 1} ? 'disabled' : ''">
+              <a class="page-link" th:href="@{/candidates(size=${candidates.size}, page=${candidates.number + 2})}"
+                 th:attr="aria-disabled=${candidates.number == candidates.totalPages - 1}" aria-label="Next">
+                  <span aria-hidden="true">&raquo;</span>
+              </a>
+          </li>
+      </ul>
+  </nav>
+
   <br/>
   <!--<div class = "row"><a href="/add-candidate">Add a new Candidate</a></div>-->
 </body>

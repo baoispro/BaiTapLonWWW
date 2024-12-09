@@ -106,40 +106,53 @@
                 </div>
               </div>
             </div>
-            <div class="d-flex flex-row gap-2 job border p-2 rounded-3">
-              <div>
-                <img th:src="@{/images/NashTech.png}" alt="Tên công ty" style="object-fit: contain"/>
-              </div>
-              <div>
-                <div class="d-flex flex-row justify-content-between">
-                  <h6 style="width: 80%">Chương Trình Đào Tạo IT Fresher - The Rookie To Engineer Batch 8 (.NET, Java, Python, Automation Test) - Up To 17M</h6>
-                  <p class="text-success fw-bold">Thỏa thuận</p>
-                </div>
-                <p class="fw-light">NashTech</p>
-                <p class="fw-light">Cập nhật 18 giờ trước</p>
-                <div class="d-flex flex-row gap-1">
-                  <p class="bg-success p-1 text-white rounded-3">.NET</p>
-                  <p class="bg-success p-1 text-white rounded-3">HTML</p>
-                  <p class="bg-success p-1 text-white rounded-3">CSS</p>
-                  <p class="bg-success p-1 text-white rounded-3">7+</p>
-                </div>
-                <div class="d-flex flex-row gap-3 justify-content-between align-items-center">
-                  <div class="d-flex flex-row gap-3 justify-content-center">
-                    <div class="d-flex flex-row gap-1 align-items-baseline">
-                      <i class="fa-solid fa-location-dot"></i>
-                      <p>Hà Nội & 2 nơi khác</p>
-                    </div>
-                    <div class="d-flex flex-row gap-1 align-items-baseline">
-                      <i class="fa-solid fa-clock"></i>
-                      <p>Còn 82 ngày để ứng tuyển</p>
-                    </div>
-                  </div>
-                  <button type="button" class="btn btn-success">Ứng tuyển</button>
-                </div>
-              </div>
-            </div>
           </div>
+          <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center">
+              <!-- Nút "Previous" -->
+              <li class="page-item" th:class="${jobs.number == 0} ? 'disabled' : ''">
+                <a class="page-link" th:href="@{/jobs(size=${jobs.size}, page=${jobs.number})}"
+                   th:attr="aria-disabled=${jobs.number == 0}" aria-label="Previous">
+                  <span aria-hidden="true">&laquo;</span>
+                </a>
+              </li>
 
+              <!-- Hiển thị trang đầu tiên -->
+              <li class="page-item" th:if="${jobs.totalPages > 1 && jobs.number > 3}">
+                <a class="page-link" th:href="@{/jobs(size=${jobs.size}, page=1)}">1</a>
+              </li>
+
+              <!-- Dấu "..." trước các trang giữa -->
+              <li class="page-item disabled" th:if="${jobs.number > 3}">
+                <span class="page-link">...</span>
+              </li>
+
+              <!-- Các trang xung quanh trang hiện tại -->
+              <li class="page-item" th:each="pageNumber : ${#numbers.sequence(jobs.number - 1, jobs.number + 1)}"
+                  th:if="${pageNumber > 0 && pageNumber <= jobs.totalPages}"
+                  th:class="${pageNumber == jobs.number + 1} ? 'active' : ''">
+                <a class="page-link" th:href="@{/jobs(size=${jobs.size}, page=${pageNumber})}" th:text="${pageNumber}"></a>
+              </li>
+
+              <!-- Dấu "..." sau các trang giữa -->
+              <li class="page-item disabled" th:if="${jobs.number < jobs.totalPages - 3}">
+                <span class="page-link">...</span>
+              </li>
+
+              <!-- Hiển thị trang cuối cùng -->
+              <li class="page-item" th:if="${jobs.totalPages > 1 && jobs.number < jobs.totalPages - 3}">
+                <a class="page-link" th:href="@{/jobs(size=${jobs.size}, page=${jobs.totalPages})}" th:text="${jobs.totalPages}"></a>
+              </li>
+
+              <!-- Nút "Next" -->
+              <li class="page-item" th:class="${jobs.number == jobs.totalPages - 1} ? 'disabled' : ''">
+                <a class="page-link" th:href="@{/jobs(size=${jobs.size}, page=${jobs.number + 2})}"
+                   th:attr="aria-disabled=${jobs.number == jobs.totalPages - 1}" aria-label="Next">
+                  <span aria-hidden="true">&raquo;</span>
+                </a>
+              </li>
+            </ul>
+          </nav>
         </div>
       </div>
 <!--Footer-->
