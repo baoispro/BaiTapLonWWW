@@ -34,7 +34,7 @@ public class Company {
     @Column(name = "image")
     private String image;
 
-    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @OneToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "address", nullable = false)
     private Address address;
 
