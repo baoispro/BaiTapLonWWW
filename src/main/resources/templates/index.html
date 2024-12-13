@@ -86,10 +86,11 @@
                 <p class="fw-light" th:text="${jobs.company.compName}"></p>
                 <p class="fw-light" th:text="${timeAgoList[iterStat.index]}"></p>
                 <div class="d-flex flex-row gap-1">
-                  <p class="bg-success p-1 text-white rounded-3">.NET</p>
-                  <p class="bg-success p-1 text-white rounded-3">HTML</p>
-                  <p class="bg-success p-1 text-white rounded-3">CSS</p>
-                  <p class="bg-success p-1 text-white rounded-3">7+</p>
+                  <!-- Hiển thị 3 kỹ năng đầu tiên -->
+                  <p class="bg-success p-1 text-white rounded-3" th:each="jobSkill, iterStat : ${jobs.jobSkills}" th:if="${iterStat.index < 3}" th:text="${jobSkill.skill.skillName}"></p>
+
+                  <!-- Hiển thị số lượng kỹ năng còn lại nếu có -->
+                  <p class="bg-success p-1 text-white rounded-3" th:if="${#lists.size(jobs.jobSkills) > 3}" th:text="'+' + (${#lists.size(jobs.jobSkills)} - 3)"></p>
                 </div>
                 <div class="d-flex flex-row gap-3 justify-content-between align-items-center">
                   <div class="d-flex flex-row gap-3 justify-content-center">
