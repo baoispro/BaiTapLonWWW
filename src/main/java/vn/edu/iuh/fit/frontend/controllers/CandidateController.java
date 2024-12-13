@@ -39,7 +39,7 @@ public class CandidateController {
     }
 
     //Load dữ liệu có phân trang
-    @GetMapping("/candidates")
+    @GetMapping("/candidate")
     public String showCandidatesListPaging (Model model, @RequestParam("page") Optional<Integer> page,@RequestParam("size") Optional<Integer> size) {
         int currentPage = page.orElse(1);
         int pageSize = size.orElse(10);

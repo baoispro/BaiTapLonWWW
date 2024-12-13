@@ -22,7 +22,7 @@
                 <a class="nav-link fw-bold" aria-current="page" href="#">Home</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link fw-bold" href="#">Danh sách công ty</a>
+                <a class="nav-link fw-bold" href="/company">Danh sách công ty</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link fw-bold" href="#">Công việc đề xuất</a>
@@ -84,7 +84,7 @@
                   <p class="text-success fw-bold" th:text="${jobs.jobSalary}"></p>
                 </div>
                 <p class="fw-light" th:text="${jobs.company.compName}"></p>
-                <p class="fw-light" th:text="${timeAgoList[iterStat.index]}"></p>
+                <p class="fw-light" th:text="'Cập nhật '+${timeAgoList[iterStat.index]}"></p>
                 <div class="d-flex flex-row gap-1">
                   <!-- Hiển thị 3 kỹ năng đầu tiên -->
                   <p class="bg-success p-1 text-white rounded-3" th:each="jobSkill, iterStat : ${jobs.jobSkills}" th:if="${iterStat.index < 3}" th:text="${jobSkill.skill.skillName}"></p>
