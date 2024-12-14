@@ -1,5 +1,4 @@
 package vn.edu.iuh.fit.backend.configs;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,18 +13,21 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import vn.edu.iuh.fit.backend.constants.RoleConstant;
 
+import javax.sql.DataSource;
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
     @Autowired
+    private DataSource dataSource;
+
+    @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-//        String pass = passwordEncoder().encode("123");
-        UserDetails user1 = User.builder()
-                .username("root")
-                .password("$2a$12$AC3oYMywkKh0Hda6q0NXkOQIRN68bP1PIA.SToyZz9ULvX5s9ORlC")
-                .roles(RoleConstant.ADMIN)
-                .build();
-        auth.inMemoryAuthentication().withUser(user1);
+        auth.jdbcAuthentication()
+                .dataSource(dataSource)
+                .passwordEncoder(new BCryptPasswordEncoder())
+                .usersByUsernameQuery("select username, password, enabled from users where username = ?")
+                .authoritiesByUsernameQuery("select username, role from users where username = ?");
     }
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -33,9 +35,9 @@ public class SecurityConfig {
                 .csrf().disable()
                 .authorizeHttpRequests(
                 authorizeRequests ->
-                        authorizeRequests.requestMatchers("/","/index.html","/home","/static/**","/css/**","/images/**","/jobs/**","/companies/**","/company").permitAll()
+                        authorizeRequests.requestMatchers("/","/index.html","/home","/static/**","/css/**","/images/**","/jobs/**","/companies/**","/company","/signUp").permitAll()
                                 .requestMatchers("/candidates").hasRole(RoleConstant.ADMIN)
-                                .anyRequest().authenticated()
+
 
 
 
