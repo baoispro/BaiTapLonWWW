@@ -12,6 +12,11 @@
   padding: 5px 0 0 32px;
 }
 
+.banner1 {
+  background: linear-gradient(90deg, #263238, #00b14f 105.53%);
+  border-radius: 5px 5px 0 0;
+}
+
 .job:hover{
   background-color: #f4f5f5;
   cursor: pointer;

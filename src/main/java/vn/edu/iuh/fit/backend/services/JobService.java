@@ -19,4 +19,10 @@ public class JobService {
         Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
         return jobRepository.findAll(pageable);
     }
+
+    public Page<Job> findByCompanyId(Long companyId, int page, int size, String sortBy, String sortDir) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(sortDir), sortBy));
+        return jobRepository.findByCompanyId(companyId, pageable);
+    }
+
 }

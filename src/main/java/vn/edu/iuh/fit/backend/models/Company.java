@@ -3,6 +3,7 @@ package vn.edu.iuh.fit.backend.models;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.Collection;
 import java.util.Objects;
 
 @Getter
@@ -37,6 +38,9 @@ public class Company {
     @OneToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "address", nullable = false)
     private Address address;
+
+    @OneToMany(mappedBy = "company",cascade = CascadeType.ALL)
+    private Collection<Job> jobs;
 
     @Override
     public String toString() {

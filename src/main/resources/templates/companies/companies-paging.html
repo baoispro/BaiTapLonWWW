@@ -55,8 +55,9 @@
     </thead>
     <tbody>
     <tr th:each="company, iStat : ${companies.content}"
-        th:style="${iStat.odd}? 'font-weight: bold;'"
-        th:alt-title="${iStat.even}? 'even' : 'odd'">
+        th:style="${iStat.odd} ? 'font-weight: bold; cursor: pointer;' : 'cursor: pointer;'"
+        th:alt-title="${iStat.even}? 'even' : 'odd'"
+        th:onclick="'window.location.href=\'/company/\' + ' + ${company.id}">
         <td th:text="${company.id}"></td>
         <td th:text="${company.compName}"></td>
         <td th:text="${company.email}"></td>
