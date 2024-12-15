@@ -35,11 +35,20 @@ public class SecurityConfig {
                 .csrf().disable()
                 .authorizeHttpRequests(
                 authorizeRequests ->
+                {
+                    try {
                         authorizeRequests.requestMatchers("/","/index.html","/home","/static/**","/css/**","/images/**","/jobs/**","/companies/**","/company/**","/signUp").permitAll()
                                 .requestMatchers("/candidates").hasRole(RoleConstant.ADMIN)
                                 .requestMatchers("/dang-tin-tuyen-dung").hasAnyRole(RoleConstant.ADMIN, RoleConstant.RECRUITER)
                                 .anyRequest().authenticated()// sau khi xong nhớ xóa dùng để debug
-
+                                .and().logout().logoutUrl("/logout").logoutSuccessUrl("/") // URL sau khi logout thành công
+                                    .invalidateHttpSession(true) // Invalidate session
+                                    .clearAuthentication(true) // Clear authentication data
+                            .       permitAll();
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                }
 
 
         ).formLogin();

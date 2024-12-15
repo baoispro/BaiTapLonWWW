@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
     <meta charset="UTF-8">
     <title>Web xin việc</title>
@@ -29,8 +29,14 @@
               </li>
             </ul>
             <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-              <button class="btn btn-outline-success" type="button" onclick="window.location.href='/login'">Đăng nhập</button>
-              <button class="btn btn-success" type="button" onclick="window.location.href='/signUp'">Đăng ký</button>
+              <div sec:authorize="isAuthenticated()">
+                <span class="navbar-text">Xin chào, <strong sec:authentication="name"></strong></span>
+                <button class="btn btn-outline-danger" type="button" onclick="window.location.href='/logout'">Đăng xuất</button>
+              </div>
+              <div sec:authorize="isAnonymous()">
+                <button class="btn btn-outline-success" type="button" onclick="window.location.href='/login'">Đăng nhập</button>
+                <button class="btn btn-success" type="button" onclick="window.location.href='/signUp'">Đăng ký</button>
+              </div>
               <button class="btn btn-primary" type="button" onclick="window.location.href='/dang-tin-tuyen-dung'">Đăng tuyển và tìm hồ sơ</button>
             </div>
           </div>
