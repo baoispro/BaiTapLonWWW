@@ -37,7 +37,8 @@ public class SecurityConfig {
                 authorizeRequests ->
                         authorizeRequests.requestMatchers("/","/index.html","/home","/static/**","/css/**","/images/**","/jobs/**","/companies/**","/company/**","/signUp").permitAll()
                                 .requestMatchers("/candidates").hasRole(RoleConstant.ADMIN)
-                                .anyRequest().authenticated()
+                                .requestMatchers("/dang-tin-tuyen-dung").hasAnyRole(RoleConstant.ADMIN, RoleConstant.RECRUITER)
+                                .anyRequest().authenticated()// sau khi xong nhớ xóa dùng để debug
 
 
 

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Web xin việc</title>
+    <link th:href="@{/css/style.css}" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <a id="logo" class="navbar-brand" href="/">EasyHire</a>
+      <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link fw-bold" aria-current="page" href="/">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link fw-bold" href="/dang-tin-tuyen-dung">Đăng tin tuyển dụng</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link fw-bold" href="#">Tìm ứng viên</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
+    <span th:text="${successMessage}"></span>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+
+  <div class="w-100 d-flex justify-content-center align-items-center my-2">
+    <form class="row g-3 w-75" action="/dang-tin-tuyen-dung" method="POST" th:object="${job}">
+      <div class="col-md-6">
+        <label for="jobTitle" class="form-label">Tên công việc</label>
+        <input type="text" class="form-control" id="jobTitle" th:field="*{jobName}">
+      </div>
+      <div class="col-md-6">
+        <label for="salary" class="form-label">Lương</label>
+        <input type="text" class="form-control" id="salary" th:field="*{jobSalary}">
+      </div>
+      <div class="col-12">
+        <label for="jobInfo" class="form-label">Thông tin công việc</label>
+        <textarea class="form-control" id="jobInfo" rows="3" th:field="*{jobDesc}"></textarea>
+      </div>
+      <div class="col-12">
+        <label for="inputSkill" class="form-label">Chọn kỹ năng</label>
+        <select id="inputSkill" class="form-select" multiple>
+          <option th:each="skill : ${skills}"
+                  th:value="${skill.id}"
+                  th:text="${skill.skillName}"></option>
+        </select>
+        <div id="selectedSkillsContainer" class="mt-3"></div>
+        <button type="button" id="addSkillButton" class="btn btn-primary mt-2">Chọn kỹ năng</button>
+      </div>
+      <div class="col-md-6">
+        <label for="quantity" class="form-label">Số lượng</label>
+        <input type="number" class="form-control" id="quantity" th:field="*{jobQuantity}">
+      </div>
+      <div class="col-md-4">
+        <label for="inputCompany" class="form-label">Công ty</label>
+        <select id="inputCompany" class="form-select" th:field="*{company}">
+          <option selected value="0">Hãy chọn tên công ty</option>
+          <option th:each="company : ${companies}"
+                  th:value="${company.id}"
+                  th:text="${company.compName}"></option>
+        </select>
+      </div>
+      <div class="col-md-2">
+        <label for="jobExpire" class="form-label">Hạn nộp hồ sơ</label>
+        <input type="datetime-local" class="form-control" id="jobExpire" th:field="*{jobExpire}">
+      </div>
+      <div class="col-12">
+        <button type="submit" class="btn btn-primary">Đăng tin</button>
+      </div>
+    </form>
+  </div>
+</body>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const selectedSkillsContainer = document.getElementById('selectedSkillsContainer');
+    const addSkillButton = document.getElementById('addSkillButton');
+    const inputSkill = document.getElementById('inputSkill');
+
+    addSkillButton.addEventListener('click', function () {
+      const selectedSkillValues = Array.from(inputSkill.selectedOptions).map(option => option.value);
+      const selectedSkillTexts = Array.from(inputSkill.selectedOptions).map(option => option.text);
+
+      // Kiểm tra nếu người dùng đã chọn kỹ năng hợp lệ
+      if (selectedSkillValues.length > 0) {
+        // Xóa các kỹ năng đã chọn trong container
+        selectedSkillsContainer.innerHTML = '';
+
+        // Tạo các div để hiển thị kỹ năng đã chọn
+        selectedSkillValues.forEach((value, index) => {
+          const skillDiv = document.createElement('div');
+          skillDiv.classList.add('d-inline-flex', 'align-items-center', 'm-2', 'p-2', 'border', 'rounded');
+
+          // Tạo thẻ span để hiển thị tên kỹ năng
+          const skillName = document.createElement('span');
+          skillName.textContent = selectedSkillTexts[index];
+          skillDiv.appendChild(skillName);
+
+          // Tạo nút xóa (dấu "x") để loại bỏ kỹ năng
+          const removeButton = document.createElement('button');
+          removeButton.classList.add('btn', 'btn-sm', 'btn-danger', 'ms-2');
+          removeButton.textContent = 'x';
+
+          // Xử lý sự kiện khi người dùng nhấn nút xóa kỹ năng
+          removeButton.addEventListener('click', function () {
+            selectedSkillsContainer.removeChild(skillDiv);
+          });
+
+          skillDiv.appendChild(removeButton);
+
+          // Thêm kỹ năng vào container
+          selectedSkillsContainer.appendChild(skillDiv);
+
+          // Thêm hidden input để gửi kỹ năng khi submit form
+          const hiddenSkillInput = document.createElement('input');
+          hiddenSkillInput.type = 'hidden';
+          hiddenSkillInput.name = 'skills';  // Đây là name cho multiple skills
+          hiddenSkillInput.value = value;
+          selectedSkillsContainer.appendChild(hiddenSkillInput);
+        });
+      }
+    });
+  });
+</script>
+</html>

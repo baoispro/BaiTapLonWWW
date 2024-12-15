@@ -9,4 +9,5 @@ import java.util.List;
 
 public interface JobRepository extends JpaRepository<Job, Long> {
     Page<Job> findByCompanyId(Long companyId, Pageable pageable);
+    Job findTopByOrderByIdDesc();
 }

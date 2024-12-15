@@ -29,6 +29,6 @@ public class JobSkill {
     @Column(name = "more_infos", length = 1000)
     private String moreInfos;
 
-    @Column(name = "skill_level", nullable = false)
+    @Column(name = "skill_level")
     private Byte skillLevel;
 }
