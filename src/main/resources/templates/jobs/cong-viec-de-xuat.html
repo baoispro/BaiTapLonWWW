@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+  <meta charset="UTF-8">
+  <title>Web xin việc</title>
+  <link th:href="@{/css/style.css}" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+  <script src="https://kit.fontawesome.com/5c5719b5ba.js" crossorigin="anonymous"></script>
+</head>
+<body>
+<!--Header-->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container-fluid">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <a id="logo" class="navbar-brand" href="/">EasyHire</a>
+    <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link fw-bold" aria-current="page" href="/">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link fw-bold" href="/company">Danh sách công ty</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link fw-bold" href="/cong-viec-de-xuat">Công việc đề xuất</a>
+        </li>
+      </ul>
+      <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+        <div sec:authorize="isAuthenticated()">
+          <span class="navbar-text">Xin chào, <strong sec:authentication="name"></strong></span>
+          <button class="btn btn-outline-danger" type="button" onclick="window.location.href='/logout'">Đăng xuất</button>
+        </div>
+        <div sec:authorize="isAnonymous()">
+          <button class="btn btn-outline-success" type="button" onclick="window.location.href='/login'">Đăng nhập</button>
+          <button class="btn btn-success" type="button" onclick="window.location.href='/signUp'">Đăng ký</button>
+        </div>
+        <button class="btn btn-primary" type="button" onclick="window.location.href='/dang-tin-tuyen-dung'">Đăng tuyển và tìm hồ sơ</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<div class="d-flex flex-column justify-content-center align-items-center w-100 bg-secondary py-3">
+  <div class="p-2 w-75 bg-white banner d-flex flex-column justify-content-center">
+    <h5 class="text-white">Việc làm chất nhất</h5>
+    <h6 class="text-white">Cứ yên tâm mà kiếm vì luôn có những công việc tuyệt vời!!!</h6>
+  </div>
+  <div class="p-2 w-75 bg-white d-flex flex-column gap-3">
+    <form class="form-group d-flex gap-4">
+      <input class="form-control mr-sm-2" type="search" placeholder="Tên công ty/công việc muốn ứng tuyển" aria-label="Search">
+      <select class="form-select w-50" id="exampleFormControlSelect1">
+        <option selected>Tất cả cấp bậc</option>
+        <option>2</option>
+        <option>3</option>
+        <option>4</option>
+        <option>5</option>
+      </select>
+      <select class="form-select w-50" id="exampleFormControlSelect2">
+        <option>Tất cả mức lương</option>
+        <option>2</option>
+        <option>3</option>
+        <option>4</option>
+        <option>5</option>
+      </select>
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+    </form>
+    <p th:text="'Tìm thấy ' + ${jobs.totalElements} + ' việc làm phù hợp với yêu cầu của bạn'"></p>
+    <div class="d-flex align-items-center gap-3">
+      <div>Ưu tiên hiển thị:</div>
+      <div class="form-check form-check-inline d-flex align-items-center gap-1">
+        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1" checked>
+        <label class="form-check-label" for="inlineRadio1">Tin mới nhất</label>
+      </div>
+      <div class="form-check form-check-inline d-flex align-items-center gap-1">
+        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
+        <label class="form-check-label" for="inlineRadio2">Lương cao nhất</label>
+      </div>
+    </div>
+    <div class="d-flex flex-column gap-2">
+      <!--Component job list-->
+      <div class="d-flex flex-row gap-2 job border p-2 rounded-3" th:each="jobs, iterStat: ${jobs.content}">
+        <div>
+          <img th:src="@{/images/{imageName}(imageName=${jobs.company.image})}" alt="Tên công ty" style="object-fit: contain"/>
+        </div>
+        <div class="w-100">
+          <div class="d-flex flex-row justify-content-between w-100">
+            <h6 style="width: 80%" th:text="${jobs.jobName}"></h6>
+            <p class="text-success fw-bold" th:text="${jobs.jobSalary}"></p>
+          </div>
+          <p class="fw-light" th:text="${jobs.company.compName}"></p>
+          <p class="fw-light" th:text="'Cập nhật '+${timeAgoList[iterStat.index]}"></p>
+          <div class="d-flex flex-row gap-1">
+            <!-- Hiển thị 3 kỹ năng đầu tiên -->
+            <p class="bg-success p-1 text-white rounded-3" th:each="jobSkill, iterStat : ${jobs.jobSkills}" th:if="${iterStat.index < 3}" th:text="${jobSkill.skill.skillName}"></p>
+
+            <!-- Hiển thị số lượng kỹ năng còn lại nếu có -->
+            <p class="bg-success p-1 text-white rounded-3" th:if="${#lists.size(jobs.jobSkills) > 3}" th:text="'+' + (${#lists.size(jobs.jobSkills)} - 3)"></p>
+          </div>
+          <div class="d-flex flex-row gap-3 justify-content-between align-items-center">
+            <div class="d-flex flex-row gap-3 justify-content-center">
+              <div class="d-flex flex-row gap-1 align-items-baseline">
+                <i class="fa-solid fa-location-dot"></i>
+                <p th:text="${jobs.company.address.city}"></p>
+              </div>
+              <div class="d-flex flex-row gap-1 align-items-baseline">
+                <i class="fa-solid fa-clock"></i>
+                <p th:text="${timeExpired[iterStat.index]}"
+                   th:attr="style=${timeExpired[iterStat.index] == 'Hết hạn' ? 'color:red;' : ''}"
+                ></p>
+              </div>
+            </div>
+            <button type="button" class="btn btn-success">Ứng tuyển</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--Pagination-->
+    <nav aria-label="Page navigation">
+      <ul class="pagination justify-content-center">
+        <!-- Nút "Previous" -->
+        <li class="page-item" th:class="${jobs.number == 0} ? 'disabled' : ''">
+          <a class="page-link" th:href="@{/jobs(size=${jobs.size}, page=${jobs.number})}"
+             th:attr="aria-disabled=${jobs.number == 0}" aria-label="Previous">
+            <span aria-hidden="true">&laquo;</span>
+          </a>
+        </li>
+
+        <!-- Hiển thị trang đầu tiên -->
+        <li class="page-item" th:if="${jobs.totalPages > 1 && jobs.number > 3}">
+          <a class="page-link" th:href="@{/jobs(size=${jobs.size}, page=1)}">1</a>
+        </li>
+
+        <!-- Dấu "..." trước các trang giữa -->
+        <li class="page-item disabled" th:if="${jobs.number > 3}">
+          <span class="page-link">...</span>
+        </li>
+
+        <!-- Các trang xung quanh trang hiện tại -->
+        <li class="page-item" th:each="pageNumber : ${#numbers.sequence(jobs.number - 1, jobs.number + 1)}"
+            th:if="${pageNumber > 0 && pageNumber <= jobs.totalPages}"
+            th:class="${pageNumber == jobs.number + 1} ? 'active' : ''">
+          <a class="page-link" th:href="@{/jobs(size=${jobs.size}, page=${pageNumber})}" th:text="${pageNumber}"></a>
+        </li>
+
+        <!-- Dấu "..." sau các trang giữa -->
+        <li class="page-item disabled" th:if="${jobs.number < jobs.totalPages - 3}">
+          <span class="page-link">...</span>
+        </li>
+
+        <!-- Hiển thị trang cuối cùng -->
+        <li class="page-item" th:if="${jobs.totalPages > 1 && jobs.number < jobs.totalPages - 3}">
+          <a class="page-link" th:href="@{/jobs(size=${jobs.size}, page=${jobs.totalPages})}" th:text="${jobs.totalPages}"></a>
+        </li>
+
+        <!-- Nút "Next" -->
+        <li class="page-item" th:class="${jobs.number == jobs.totalPages - 1} ? 'disabled' : ''">
+          <a class="page-link" th:href="@{/jobs(size=${jobs.size}, page=${jobs.number + 2})}"
+             th:attr="aria-disabled=${jobs.number == jobs.totalPages - 1}" aria-label="Next">
+            <span aria-hidden="true">&raquo;</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</div>
+<!--Footer-->
+<div class="container">
+  <footer class="py-5">
+    <div class="row">
+      <div class="col-6 col-md-2 mb-3">
+        <h5>Section</h5>
+        <ul class="nav flex-column">
+          <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Home</a></li>
+          <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Features</a></li>
+          <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Pricing</a></li>
+          <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">FAQs</a></li>
+          <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">About</a></li>
+        </ul>
+      </div>
+
+      <div class="col-6 col-md-2 mb-3">
+        <h5>Section</h5>
+        <ul class="nav flex-column">
+          <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Home</a></li>
+          <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Features</a></li>
+          <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Pricing</a></li>
+          <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">FAQs</a></li>
+          <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">About</a></li>
+        </ul>
+      </div>
+
+      <div class="col-6 col-md-2 mb-3">
+        <h5>Section</h5>
+        <ul class="nav flex-column">
+          <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Home</a></li>
+          <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Features</a></li>
+          <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Pricing</a></li>
+          <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">FAQs</a></li>
+          <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">About</a></li>
+        </ul>
+      </div>
+
+      <div class="col-md-5 offset-md-1 mb-3">
+        <form>
+          <h5>Subscribe to our newsletter</h5>
+          <p>Monthly digest of what's new and exciting from us.</p>
+          <div class="d-flex flex-column flex-sm-row w-100 gap-2">
+            <label for="newsletter1" class="visually-hidden">Email address</label>
+            <input id="newsletter1" type="text" class="form-control" placeholder="Email address">
+            <button class="btn btn-primary" type="button">Subscribe</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="d-flex flex-column flex-sm-row justify-content-between py-4 my-4 border-top">
+      <p>© 2024 Company, Inc. All rights reserved.</p>
+      <ul class="list-unstyled d-flex">
+        <li class="ms-3"><a class="link-body-emphasis" href="#"><svg class="bi" width="24" height="24"><use xlink:href="#twitter"></use></svg></a></li>
+        <li class="ms-3"><a class="link-body-emphasis" href="#"><svg class="bi" width="24" height="24"><use xlink:href="#instagram"></use></svg></a></li>
+        <li class="ms-3"><a class="link-body-emphasis" href="#"><svg class="bi" width="24" height="24"><use xlink:href="#facebook"></use></svg></a></li>
+      </ul>
+    </div>
+  </footer>
+</div>
+</body>
+</html>

@@ -13,4 +13,5 @@ public interface CandidateRepository extends JpaRepository<Candidate, Long> {
             "JOIN Skill s ON s = cs.skill " +
             "WHERE s.skillName LIKE %:skillName%")
     Page<Candidate> findCandidatesBySkillName(@Param("skillName") String skillName, Pageable pageable);
+    Candidate findByUserUsername(String username);
 }
