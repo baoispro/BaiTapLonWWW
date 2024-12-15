@@ -30,6 +30,9 @@ public class Skill {
     @OneToMany(mappedBy = "skill", cascade = CascadeType.ALL)
     private Collection<JobSkill> jobSkills = new ArrayList<>();
 
+    @OneToMany(mappedBy = "skill", cascade = CascadeType.ALL)
+    private Collection<CandidateSkill> candidateSkills = new ArrayList<>() ;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -22,6 +22,9 @@ public class User {
     private boolean enabled;
     private String role;
 
+    @OneToOne(mappedBy = "user")
+    private Candidate candidate;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

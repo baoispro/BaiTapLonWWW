@@ -17,4 +17,10 @@ public class CandidateService {
         return candidateRepository.findAll(pageable);
     }
 
+    public Page<Candidate> findCandidateBySkillName(String skillName, int pageNo, int pageSize, String sortBy, String sortDirection) {
+        Sort sort = Sort.by(Sort.Direction.fromString(sortDirection), sortBy);
+        Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
+        return candidateRepository.findCandidatesBySkillName(skillName,pageable);
+    }
+
 }

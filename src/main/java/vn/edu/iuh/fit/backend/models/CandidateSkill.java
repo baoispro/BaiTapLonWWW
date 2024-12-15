@@ -2,12 +2,12 @@ package vn.edu.iuh.fit.backend.models;
 
 import jakarta.persistence.*;
 import lombok.*;
-import vn.edu.iuh.fit.backend.ids.CandidateSkillId;
 
 import java.util.Objects;
 
 @Getter
 @Setter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -17,12 +17,12 @@ public class CandidateSkill {
     private CandidateSkillId id;
 
     @MapsId("canId")
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "can_id", nullable = false)
     private Candidate can;
 
     @MapsId("skillId")
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "skill_id", nullable = false)
     private Skill skill;
 

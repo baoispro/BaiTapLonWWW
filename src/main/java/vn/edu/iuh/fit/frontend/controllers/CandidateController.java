@@ -13,6 +13,7 @@ import vn.edu.iuh.fit.backend.models.Address;
 import vn.edu.iuh.fit.backend.models.Candidate;
 import vn.edu.iuh.fit.backend.repositories.AddressRepository;
 import vn.edu.iuh.fit.backend.repositories.CandidateRepository;
+import vn.edu.iuh.fit.backend.repositories.SkillRepository;
 import vn.edu.iuh.fit.backend.services.CandidateService;
 
 import java.util.List;
@@ -29,6 +30,9 @@ public class CandidateController {
     private AddressRepository addressRepository;
 
     @Autowired
+    private SkillRepository skillRepository;
+
+    @Autowired
     private CandidateService candidateService;
 
     //Load dữ liệu không phân trang
@@ -40,10 +44,15 @@ public class CandidateController {
 
     //Load dữ liệu có phân trang
     @GetMapping("/candidate")
-    public String showCandidatesListPaging (Model model, @RequestParam("page") Optional<Integer> page,@RequestParam("size") Optional<Integer> size) {
+    public String showCandidatesListPaging (Model model, @RequestParam("page") Optional<Integer> page,@RequestParam("size") Optional<Integer> size, @RequestParam(name = "skill", required = false) String skill) {
         int currentPage = page.orElse(1);
         int pageSize = size.orElse(10);
-        Page<Candidate> candidates = candidateService.findAll(currentPage-1, pageSize,"id","asc");
+        Page<Candidate> candidates;
+        if (skill != null && !skill.isEmpty()) {
+            candidates = candidateService.findCandidateBySkillName(skill, currentPage-1, pageSize,"id","asc");
+        } else {
+            candidates = candidateService.findAll(currentPage-1, pageSize,"id","asc");
+        }
         model.addAttribute("candidates", candidates);
         int totalPages = candidates.getTotalPages();
         if(totalPages>0){
@@ -52,6 +61,8 @@ public class CandidateController {
                     .collect(Collectors.toList());
             model.addAttribute("pageNumbers", pageNumbers);
         }
+
+
         return "candidates/candidates-paging";
     }
 
